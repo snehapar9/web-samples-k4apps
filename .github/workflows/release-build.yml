@@ -21,7 +21,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: netcore-webapp3.1
-          path: ./publish
+          path: ./src/netcore-webapp3.1/publish
 
   build_netcore_app_5_0:
     runs-on: ubuntu-latest
@@ -37,8 +37,8 @@ jobs:
         working-directory: ./src/netcore-webapp5.0
       - uses: actions/upload-artifact@v2
         with:
-          name: netcore-webapp5.1
-          path: ./publish
+          name: netcore-webapp5.0
+          path: ./src/netcore-webapp5.0/publish
 
   create_release:
     needs: [build_netcore_app_3_1, build_netcore_app_5_0]
@@ -51,6 +51,7 @@ jobs:
         with:
           name: netcore-webapp3.1
           path: zip
+      - run: ls ./zip
       - uses: actions/download-artifact@v2
         with:
           name: netcore-webapp5.0
