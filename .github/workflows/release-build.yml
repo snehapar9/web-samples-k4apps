@@ -16,12 +16,12 @@ jobs:
         with:
           dotnet-version: 3.1.x
       - name: Build
-        run: dotnet publish --configuration Release
+        run: dotnet publish -c Release -o ./publish
         working-directory: ./src/netcore-webapp3.1
       - uses: actions/upload-artifact@v2
         with:
           name: netcore-webapp3.1
-          path: ./src/netcore-webapp3.1/bin/Release/publish
+          path: ./publish
 
   build_netcore_app_5_0:
     runs-on: ubuntu-latest
@@ -33,14 +33,15 @@ jobs:
         with:
           dotnet-version: 5.0.x
       - name: Build
-        run: dotnet publish --configuration Release
+        run: dotnet publish -c Release -o ./publish
         working-directory: ./src/netcore-webapp5.0
       - uses: actions/upload-artifact@v2
         with:
           name: netcore-webapp5.1
-          path: ./src/netcore-webapp5.1/bin/Release/publish
+          path: ./publish
 
   create_release:
+    needs: [build_netcore_app_3_1, build_netcore_app_5_0]
     runs-on: ubuntu-latest
 
     steps:
