@@ -15,20 +15,14 @@ jobs:
         uses: actions/setup-dotnet@v1.7.2
         with:
           dotnet-version: 3.1.x
-      - name: change directory to netcore-webapp3.1
-        run: cd ./src/netcore-webapp3.1
-      - name: Install dependencies
-        run: dotnet restore
       - name: Build
         run: dotnet publish --configuration Release
+        working-directory: ./src/netcore-webapp3.1
       - name: Setup .NET Core SDK 5.0
         uses: actions/setup-dotnet@v1.7.2
         with:
           dotnet-version: 5.0.x
-      - name: change directory to netcore-webapp5.0
-        run: cd ./src/netcore-webapp5.0
-      - name: Install dependencies
-        run: dotnet restore
       - name: Build
         run: dotnet publish --configuration Release
+        working-directory: ./src/netcore-webapp5.0
 
