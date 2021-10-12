@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build_netcore_app:
+  build_netcore_app_3_1:
     runs-on: ubuntu-latest
 
     steps:
@@ -18,6 +18,16 @@ jobs:
       - name: Build
         run: dotnet publish --configuration Release
         working-directory: ./src/netcore-webapp3.1
+      - uses: actions/upload-artifact@v2
+        with:
+          name: netcore-webapp3.1
+          path: ./src/netcore-webapp3.1/bin/Release/publish
+
+  build_netcore_app_5_0:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
       - name: Setup .NET Core SDK 5.0
         uses: actions/setup-dotnet@v1.7.2
         with:
@@ -25,4 +35,23 @@ jobs:
       - name: Build
         run: dotnet publish --configuration Release
         working-directory: ./src/netcore-webapp5.0
+      - uses: actions/upload-artifact@v2
+        with:
+          name: netcore-webapp5.1
+          path: ./src/netcore-webapp5.1/bin/Release/publish
 
+  create_release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - run: mkdir zip
+      - uses: actions/download-artifact@v2
+        with:
+          name: netcore-webapp3.1
+          path: zip
+      - uses: actions/download-artifact@v2
+        with:
+          name: netcore-webapp5.0
+          path: zip
+      - run: ls ./zip
