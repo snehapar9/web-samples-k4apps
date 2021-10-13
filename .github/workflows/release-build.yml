@@ -19,13 +19,15 @@ jobs:
       - name: Build
         run: dotnet publish -c Release -o ./bin/publish
         working-directory: ./src/netcore-webapp3.1
-      - uses: montudor/action-zip@v1
-        with:
-          args: zip -qq -r netcore-webapp3.1.zip  ./src/netcore-webapp3.1/bin/publish
+      - run: zip -qq -r netcore-webapp3.1.zip .
+        working-directory: ./src/netcore-webapp3.1/bin/publish
+      #- uses: montudor/action-zip@v1
+      #  with:
+      #    args: zip -qq -r netcore-webapp3.1.zip  ./src/netcore-webapp3.1/bin/publish
       - uses: actions/upload-artifact@v2
         with:
           name: netcore-webapp3.1
-          path: ./netcore-webapp3.1.zip
+          path: ./src/netcore-webapp3.1/bin/publish/netcore-webapp3.1.zip
 
   build_netcore_app_5_0:
     runs-on: ubuntu-latest
@@ -42,6 +44,7 @@ jobs:
       - uses: montudor/action-zip@v1
         with:
           args: zip -qq -r netcore-webapp5.0.zip  ./src/netcore-webapp5.0/bin/publish
+          working
       - uses: actions/upload-artifact@v2
         with:
           name: netcore-webapp5.0
