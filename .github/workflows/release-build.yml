@@ -19,11 +19,8 @@ jobs:
       - name: Build
         run: dotnet publish -c Release -o ./bin/publish
         working-directory: ./src/netcore-webapp3.1
-      - run: zip -qq -r netcore-webapp3.1.zip .
+      - run: zip -qq -r netcore-webapp3.1.zip . #seems zip in pre-installed
         working-directory: ./src/netcore-webapp3.1/bin/publish
-      #- uses: montudor/action-zip@v1
-      #  with:
-      #    args: zip -qq -r netcore-webapp3.1.zip  ./src/netcore-webapp3.1/bin/publish
       - uses: actions/upload-artifact@v2
         with:
           name: netcore-webapp3.1
@@ -41,13 +38,12 @@ jobs:
       - name: Build
         run: dotnet publish -c Release -o ./bin/publish
         working-directory: ./src/netcore-webapp5.0
-      - uses: montudor/action-zip@v1
-        with:
-          args: zip -qq -r netcore-webapp5.0.zip  ./src/netcore-webapp5.0/bin/publish
+      - run: zip -qq -r netcore-webapp5.0.zip . #seems zip in pre-installed
+        working-directory: ./src/netcore-webapp5.0/bin/publish
       - uses: actions/upload-artifact@v2
         with:
           name: netcore-webapp5.0
-          path: ./netcore-webapp5.0.zip
+          path: ./src/netcore-webapp5.0/bin/publish/netcore-webapp5.0.zip
 
   create_release:
     needs: [build_netcore_app_3_1, build_netcore_app_5_0]
@@ -57,18 +53,15 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - run: mkdir zip
       - uses: actions/download-artifact@v2
         with:
           name: netcore-webapp3.1
-          path: zip
-      - run: ls ./zip
+          path: .
       - uses: actions/download-artifact@v2
         with:
           name: netcore-webapp5.0
-          path: zip
-      - run: ls ./zip
+          path: .
       - uses: ncipollo/release-action@v1.8.10
         with:
-          artifacts: "./zip/netcore-webapp3.1.zip,./zip/netcore-webapp5.0.zip"
+          artifacts: "./netcore-webapp3.1.zip,./netcore-webapp5.0.zip"
           token: ${{ secrets.GITHUB_TOKEN }}
