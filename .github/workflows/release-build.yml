@@ -2,8 +2,8 @@ name: dotnet package
 
 on:
   push:
-    branches:
-      - main
+    tags:
+      - '*'
 
 
 jobs:
@@ -53,6 +53,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - run: mkdir zip
       - uses: actions/download-artifact@v2
         with:
