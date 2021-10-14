@@ -26,27 +26,27 @@ jobs:
           name: netcore-webapp3.1
           path: ./src/netcore-webapp3.1/bin/publish/netcore-webapp3.1.zip
 
-  build_netcore_app_5_0:
+  build_dotnet_app_5_0:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
-      - name: Setup .NET Core SDK 5.0
+      - name: Setup .NET SDK 5.0
         uses: actions/setup-dotnet@v1.7.2
         with:
           dotnet-version: 5.0.x
       - name: Build
         run: dotnet publish -c Release -o ./bin/publish
-        working-directory: ./src/netcore-webapp5.0
-      - run: zip -qq -r netcore-webapp5.0.zip . #seems zip in pre-installed
-        working-directory: ./src/netcore-webapp5.0/bin/publish
+        working-directory: ./src/dotnet-webapp5.0
+      - run: zip -qq -r dotnet-webapp5.0.zip . #seems zip in pre-installed
+        working-directory: ./src/dotnet-webapp5.0/bin/publish
       - uses: actions/upload-artifact@v2
         with:
-          name: netcore-webapp5.0
-          path: ./src/netcore-webapp5.0/bin/publish/netcore-webapp5.0.zip
+          name: dotnet-webapp5.0
+          path: ./src/dotnet-webapp5.0/bin/publish/dotnet-webapp5.0.zip
 
   create_release:
-    needs: [build_netcore_app_3_1, build_netcore_app_5_0]
+    needs: [build_netcore_app_3_1, build_dotnet_app_5_0]
     runs-on: ubuntu-latest
 
     steps:
@@ -59,9 +59,9 @@ jobs:
           path: .
       - uses: actions/download-artifact@v2
         with:
-          name: netcore-webapp5.0
+          name: dotnet-webapp5.0
           path: .
       - uses: ncipollo/release-action@v1.8.10
         with:
-          artifacts: "./netcore-webapp3.1.zip,./netcore-webapp5.0.zip"
+          artifacts: "./netcore-webapp3.1.zip,./dotnet-webapp5.0.zip"
           token: ${{ secrets.GITHUB_TOKEN }}

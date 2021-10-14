@@ -20,7 +20,7 @@ Web samples for testing k4apps
     * Add zip file name to `with.artifacts` for step **ncipollo/release-action@v1.8.10**
 1. Adding new tag will trigger the workflow to create a new release against the tag, e.g. new release will be created if adding new tag v0.1.2
 
-![](./doc-img/release.PNG) 
+![release](./doc-img/release.PNG) 
 
 ## How to download the corresponding zip file
 The corresponding zip file from latest release will be used for the test, so you may always use the url https://github.com/USER/PROJECT/releases/latest/download/package-name.zip to get latest zip file for one language, e.g. https://github.com/VSChina/web-samples-k4apps/releases/latest/download/netcore-webapp3.1.zip.
