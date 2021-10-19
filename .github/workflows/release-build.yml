@@ -45,8 +45,20 @@ jobs:
           name: dotnet-webapp5.0
           path: ./src/dotnet-webapp5.0/bin/publish/dotnet-webapp5.0.zip
 
+  zip_php_7_4:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - run: zip -qq -r php-webapp7.4.zip . #seems zip in pre-installed
+        working-directory: ./src/php-webapp7.4
+      - uses: actions/upload-artifact@v2
+        with:
+          name: php-webapp7.4
+          path: ./src/php-webapp7.4/php-webapp7.4.zip
+
   create_release:
-    needs: [build_netcore_app_3_1, build_dotnet_app_5_0]
+    needs: [build_netcore_app_3_1, build_dotnet_app_5_0, zip_php_7_4]
     runs-on: ubuntu-latest
 
     steps:
@@ -61,7 +73,11 @@ jobs:
         with:
           name: dotnet-webapp5.0
           path: .
+      - uses: actions/download-artifact@v2
+        with:
+          name: php-webapp7.4
+          path: .
       - uses: ncipollo/release-action@v1.8.10
         with:
-          artifacts: "./netcore-webapp3.1.zip,./dotnet-webapp5.0.zip"
+          artifacts: "./netcore-webapp3.1.zip,./dotnet-webapp5.0.zip,./php-webapp7.4.zip"
           token: ${{ secrets.GITHUB_TOKEN }}
