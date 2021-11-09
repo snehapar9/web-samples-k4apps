@@ -45,6 +45,25 @@ jobs:
           name: dotnet-webapp5.0
           path: ./src/dotnet-webapp5.0/bin/publish/dotnet-webapp5.0.zip
 
+  build_dotnet_app_6_0:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET SDK 6.0
+        uses: actions/setup-dotnet@v1.7.2
+        with:
+          dotnet-version: 6.0.x
+      - name: Build
+        run: dotnet publish -c Release -o ./bin/publish
+        working-directory: ./src/dotnet-webapp6.0
+      - run: zip -qq -r dotnet-webapp6.0.zip . #seems zip in pre-installed
+        working-directory: ./src/dotnet-webapp6.0/bin/publish
+      - uses: actions/upload-artifact@v2
+        with:
+          name: dotnet-webapp6.0
+          path: ./src/dotnet-webapp6.0/bin/publish/dotnet-webapp6.0.zip
+
   zip_php_7_4:
     runs-on: ubuntu-latest
 
@@ -58,7 +77,7 @@ jobs:
           path: ./src/php-webapp7.4/php-webapp7.4.zip
 
   create_release:
-    needs: [build_netcore_app_3_1, build_dotnet_app_5_0, zip_php_7_4]
+    needs: [build_netcore_app_3_1, build_dotnet_app_5_0, build_dotnet_app_6_0, zip_php_7_4]
     runs-on: ubuntu-latest
 
     steps:
@@ -75,9 +94,13 @@ jobs:
           path: .
       - uses: actions/download-artifact@v2
         with:
+          name: dotnet-webapp6.0
+          path: .
+      - uses: actions/download-artifact@v2
+        with:
           name: php-webapp7.4
           path: .
       - uses: ncipollo/release-action@v1.8.10
         with:
-          artifacts: "./netcore-webapp3.1.zip,./dotnet-webapp5.0.zip,./php-webapp7.4.zip"
+          artifacts: "./netcore-webapp3.1.zip,./dotnet-webapp5.0.zip,./dotnet-webapp6.0.zip,./php-webapp7.4.zip"
           token: ${{ secrets.GITHUB_TOKEN }}
