@@ -28,7 +28,7 @@ namespace net_core_site
             {
                 endpoints.MapGet("/", async context =>
                 {
-                    await context.Response.WriteAsync("Hello, World!");
+                    await context.Response.WriteAsync($"Hello, World! {System.Environment.Version}");
                 });
             });
         }
