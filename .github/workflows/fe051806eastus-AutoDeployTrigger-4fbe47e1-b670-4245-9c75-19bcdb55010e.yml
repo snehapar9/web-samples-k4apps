@@ -1,0 +1,42 @@
+name: Trigger auto deployment for fe051806eastus
+
+# When this action will be executed
+on:
+  # Automatically trigger it when detected changes in repo
+  push:
+    branches: 
+      [ sc-eastus-051806 ]
+    paths:
+    - '**'
+    - '.github/workflows/fe051806eastus-AutoDeployTrigger-4fbe47e1-b670-4245-9c75-19bcdb55010e.yml'
+
+  # Allow mannually trigger 
+  workflow_dispatch:
+      
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout to the branch
+        uses: actions/checkout@v2
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.FE051806EASTUS_AZURE_CREDENTIALS }}
+
+      - name: Build and push container image to registry
+        uses: azure/container-apps-deploy-action@v1
+        with:
+          appSourcePath: ${{ github.workspace }} 
+          registryUrl: snehaparacr.azurecr.io
+          registryUsername: ${{ secrets.FE051806EASTUS_REGISTRY_USERNAME }}
+          registryPassword: ${{ secrets.FE051806EASTUS_REGISTRY_PASSWORD }}
+          containerAppName: fe051806eastus
+          resourceGroup: nonvnet-nonlong-eastus-202306012216-rg
+          imageToBuild: snehaparacr.azurecr.io/fe051806eastus:${{ github.sha }}
+          
+
+     
+
